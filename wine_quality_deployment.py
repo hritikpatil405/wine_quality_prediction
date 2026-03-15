@@ -11,25 +11,25 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# load trained model
-model = joblib.load('wine_quality_model.pkl')
+model = joblib.load("wine_type_model.pkl")
 
-st.title("Wine Quality Prediction Model")
+st.title("Wine Type Prediction System")
 
-# user inputs
-fixed_acidity = st.number_input("Enter fixed acidity", 0.0, 20.0)
-volatile_acidity = st.number_input("Enter volatile acidity", 0.0, 2.0)
-citric_acid = st.number_input("Enter citric acid", 0.0, 1.0)
-residual_sugar = st.number_input("Enter residual sugar", 0.0, 20.0)
-chlorides = st.number_input("Enter chlorides", 0.0, 1.0)
-free_sulfur_dioxide = st.number_input("Enter free sulfur dioxide", 0.0, 100.0)
-total_sulfur_dioxide = st.number_input("Enter total sulfur dioxide", 0.0, 300.0)
-density = st.number_input("Enter density", 0.9900, 1.0100)
-ph = st.number_input("Enter pH", 0.0, 14.0)
-sulphates = st.number_input("Enter sulphates", 0.0, 2.0)
-alcohol = st.number_input("Enter alcohol", 0.0, 20.0)
+st.write("Enter wine properties to predict whether it is Red or White.")
 
-# create dataframe
+fixed_acidity = st.number_input("Fixed Acidity")
+volatile_acidity = st.number_input("Volatile Acidity")
+citric_acid = st.number_input("Citric Acid")
+residual_sugar = st.number_input("Residual Sugar")
+chlorides = st.number_input("Chlorides")
+free_sulfur_dioxide = st.number_input("Free Sulfur Dioxide")
+total_sulfur_dioxide = st.number_input("Total Sulfur Dioxide")
+density = st.number_input("Density")
+pH = st.number_input("pH")
+sulphates = st.number_input("Sulphates")
+alcohol = st.number_input("Alcohol")
+quality = st.number_input("Quality")
+
 df = pd.DataFrame({
     "fixed acidity":[fixed_acidity],
     "volatile acidity":[volatile_acidity],
@@ -39,12 +39,17 @@ df = pd.DataFrame({
     "free sulfur dioxide":[free_sulfur_dioxide],
     "total sulfur dioxide":[total_sulfur_dioxide],
     "density":[density],
-    "pH":[ph],
+    "pH":[pH],
     "sulphates":[sulphates],
-    "alcohol":[alcohol]
+    "alcohol":[alcohol],
+    "quality":[quality]
 })
 
-# prediction
-if st.button("Predict Wine Quality"):
+if st.button("Predict Wine Type"):
+
     prediction = model.predict(df)
-    st.success(f"Predicted Wine Quality: {prediction[0]}")
+
+    if prediction[0] == 1:
+        st.success("The wine type is WHITE")
+    else:
+        st.error("The wine type is RED")
