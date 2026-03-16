@@ -12,46 +12,40 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-model = joblib.load("wine_quality_prediction.pkl")
+model = joblib.load("wine_quality_model.pkl")
 
-st.title("Wine Quality Merged System")
+st.title("Wine Quality Prediction")
 
-st.write("you can enter the data from sensor and check whether your machine will work or fail under certain condition")
+fixed_acidity = st.number_input("Fixed Acidity")
+volatile_acidity = st.number_input("Volatile Acidity")
+citric_acid = st.number_input("Citric Acid")
+residual_sugar = st.number_input("Residual Sugar")
+chlorides = st.number_input("Chlorides")
+free_sulfur_dioxide = st.number_input("Free Sulfur Dioxide")
+total_sulfur_dioxide = st.number_input("Total Sulfur Dioxide")
+density = st.number_input("Density")
+ph = st.number_input("pH")
+sulphates = st.number_input("Sulphates")
+alcohol = st.number_input("Alcohol")
 
-fixed acidity= st.number_input("fixed acidity")
-volatile acidity = st.number_input("volatile acidity")
-citric acid = st.number_input("citric acid")
-residual sugar = st.number_input("residual sugar")
-chlorides = st.number_input("chlorides")
-free sulfur dioxide = st.number_input("free sulfur dioxide")
-total sulfur dioxide = st.number_input("total sulfur dioxide")
-density = st.number_input("density")
-pH = st.number_input("pH")
-sulphates = st.number_input("sulphates")
-alcohol = st.number_input("alcohol")
-quality = st.number_input("quality")
-type = st.number_input("type")
-
+wine_type = st.selectbox("Wine Type", ["red", "white"])
 
 df = pd.DataFrame({
-    "fixed acidity": [fixed acidity],
-    "volatile acidity": [volatile acidity],
-    "citric acid": [citric acid],
-    "residual sugar": [residual sugar],
-    "chlorides": [chlorides],
-    "free sulfur dioxide": [free sulfur dioxide],
-    "total sulfur dioxide": [total sulfur dioxide],
-    "density": [density],
-    "pH": [pH],
-    "sulphates": [sulphates],
-    "alcohol": [alcohol],
-    "quality": [quality],
-    "type": [type],
+    "fixed acidity":[fixed_acidity],
+    "volatile acidity":[volatile_acidity],
+    "citric acid":[citric_acid],
+    "residual sugar":[residual_sugar],
+    "chlorides":[chlorides],
+    "free sulfur dioxide":[free_sulfur_dioxide],
+    "total sulfur dioxide":[total_sulfur_dioxide],
+    "density":[density],
+    "pH":[ph],
+    "sulphates":[sulphates],
+    "alcohol":[alcohol],
+    "type":[wine_type]
 })
 
-if st.button("Predict"):
+if st.button("Predict Quality"):
+    df["type"] = df["type"].map({"red":0, "white":1})
     prediction = model.predict(df)
-    if prediction[0] ==1:
-      st.error("Wine quality bad")
-    else:
-      st.success("Wine quality Good")
+    st.success(f"Predicted Wine Quality: {prediction[0]}")
