@@ -21,9 +21,9 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-model = joblib.load("wine_quality_prediction.pkl")
+model = joblib.load("wine_quality_model.pkl")
 
-st.title("Wine Quality Prediction")
+st.title("Wine Type Prediction")
 
 fixed_acidity = st.number_input("Fixed Acidity")
 volatile_acidity = st.number_input("Volatile Acidity")
@@ -36,6 +36,7 @@ density = st.number_input("Density")
 ph = st.number_input("pH")
 sulphates = st.number_input("Sulphates")
 alcohol = st.number_input("Alcohol")
+quality = st.number_input("Quality")
 
 df = pd.DataFrame({
     "fixed acidity":[fixed_acidity],
@@ -48,9 +49,14 @@ df = pd.DataFrame({
     "density":[density],
     "pH":[ph],
     "sulphates":[sulphates],
-    "alcohol":[alcohol]
+    "alcohol":[alcohol],
+    "quality":[quality]
 })
 
-if st.button("Predict Wine Quality"):
+if st.button("Predict Wine Type"):
     prediction = model.predict(df)
-    st.success(f"Predicted Wine Quality: {prediction[0]}")
+
+    if prediction[0] == 0:
+        st.success("Wine Type: Red")
+    else:
+        st.success("Wine Type: White")
