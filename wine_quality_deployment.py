@@ -21,34 +21,22 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# Load trained model
-model = joblib.load('wine_quality_prediction.pkl')
+model = joblib.load("wine_quality_model.pkl")
 
-st.title('Wine Quality Prediction System')
+st.title("Wine Quality Prediction")
 
-st.write("Enter chemical properties of wine to predict its quality")
+fixed_acidity = st.number_input("Fixed Acidity")
+volatile_acidity = st.number_input("Volatile Acidity")
+citric_acid = st.number_input("Citric Acid")
+residual_sugar = st.number_input("Residual Sugar")
+chlorides = st.number_input("Chlorides")
+free_sulfur_dioxide = st.number_input("Free Sulfur Dioxide")
+total_sulfur_dioxide = st.number_input("Total Sulfur Dioxide")
+density = st.number_input("Density")
+ph = st.number_input("pH")
+sulphates = st.number_input("Sulphates")
+alcohol = st.number_input("Alcohol")
 
-# User inputs
-fixed_acidity = st.number_input('Fixed Acidity')
-volatile_acidity = st.number_input('Volatile Acidity')
-citric_acid = st.number_input('Citric Acid')
-
-residual_sugar = st.number_input('Residual Sugar')
-chlorides = st.number_input('Chlorides')
-
-free_sulfur_dioxide = st.number_input('Free Sulfur Dioxide')
-total_sulfur_dioxide = st.number_input('Total Sulfur Dioxide')
-
-density = st.number_input('Density')
-ph = st.number_input('pH')
-
-sulphates = st.number_input('Sulphates')
-alcohol = st.number_input('Alcohol')
-
-wine_type = st.selectbox('Wine Type', ['red','white'])
-
-
-# Create dataframe
 df = pd.DataFrame({
     "fixed acidity":[fixed_acidity],
     "volatile acidity":[volatile_acidity],
@@ -60,17 +48,9 @@ df = pd.DataFrame({
     "density":[density],
     "pH":[ph],
     "sulphates":[sulphates],
-    "alcohol":[alcohol],
-    "type":[wine_type]
+    "alcohol":[alcohol]
 })
 
-# Encode wine type
-df["type"] = df["type"].map({"red":0, "white":1})
-
-
-# Prediction
-if st.button('Predict Wine Quality'):
-
+if st.button("Predict Wine Quality"):
     prediction = model.predict(df)
-
     st.success(f"Predicted Wine Quality: {prediction[0]}")
